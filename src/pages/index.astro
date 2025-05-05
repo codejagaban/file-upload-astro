@@ -1,0 +1,27 @@
+---
+// import FileUploader from '../components/FileUploader.astro';
+// import FileUploader from "../components/FileUploader";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@v1/web/uc-file-uploader-inline.min.css"
+    />
+  </head>
+  <section>
+    <h1>File Uploading from Astro Application</h1>
+    <!-- <FileUploader client:load /> -->
+    <uc-file-uploader-inline ctx-name="my-uploader"></uc-file-uploader-inline>
+
+    <uc-config ctx-name="my-uploader" pubkey="ccddaf90ad29e3d2c660"> </uc-config>
+  </section>
+</Layout>
+
+<script type="module">
+	import * as UC from "https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@v1/web/file-uploader.min.js";
+	UC.defineComponents(UC);
+</script>
+

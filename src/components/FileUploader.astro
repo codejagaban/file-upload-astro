@@ -1,0 +1,108 @@
+---
+---
+
+<form method="post" enctype="multipart/form-data" class="upload-form">
+  <input name="file" type="file" multiple class="file-input" accept="image/webp, image/jpeg, image/png" />
+  <button type="submit">Upload</button>
+</form>
+<p id="status"></p>
+
+<div id="file-info-list"></div>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("form")!;
+   const status = document.getElementById("status") as HTMLParagraphElement;
+   const fileInput = document.querySelector<HTMLInputElement>("input[type='file']")!;
+   const button = document.querySelector<HTMLButtonElement>("button")!;
+   const fileInfoList = document.getElementById("file-info-list") as HTMLDivElement;
+  
+   async function uploadFiles(formData: FormData): Promise<void> {
+   try {
+     const response = await fetch("https://httpbin.org/post", {
+       method: "POST",
+       body: formData,
+     });
+
+     if (!response.ok) {
+       throw new Error("Network response was not OK");
+     }
+
+     const data = await response.json();
+     console.log("File uploaded successfully:", data);
+     updateStatusMessage("✅ File uploaded successfully.");
+   } catch (error) {
+     console.error("File upload failed:", error);
+     updateStatusMessage("❌ File upload failed.");
+   }
+ }
+ function handleSubmit(event: SubmitEvent): void {
+   event.preventDefault();
+
+   const formData = new FormData(form);
+   const files = formData.getAll("file") as File[];
+
+   // Clear any content existing
+   fileInfoList.innerHTML = "";
+
+// Loop through files and log/display metadata
+    files.forEach((file, i) => {
+      const listItem = document.createElement("ul");
+      const title = document.createElement("p");
+      title.textContent = files.length > 1
+        ? `File details number ${i + 1}:`
+        : "File details:";
+
+      listItem.innerHTML = `
+        <li>📄Name: ${file.name}</li>
+        <li>Type: ${file.type || "unknown"}</li>
+        <li>Size: ${(file.size / 1024).toFixed(2)} KB</li>
+      `;
+      fileInfoList.appendChild(title);
+      fileInfoList.appendChild(listItem);
+    })
+
+   updateStatusMessage("⏳ Uploading file...");
+   uploadFiles(formData);
+ }
+ form.addEventListener("submit", handleSubmit);
+
+ function updateStatusMessage(message: string): void {
+    status.textContent = message;
+  }
+
+  function validateFiles(files: FileList | File[]): void {
+  const validTypes = ["image/jpeg", "image/png"];
+  const maxSize = 1024 * 1024; // 1MB
+  for (const file of files) {
+    if (!validTypes.includes(file.type)) {
+      throw new Error(
+        `❌ File "${file.name}" could not be uploaded. Only images with the following types are allowed: JPEG, PNG.`
+      );
+    }
+    if (file.size > maxSize) {
+         throw new Error(
+           `❌ File "${file.name}" is too large. Maximum size is 1MB.`
+         );
+  }
+  }
+}
+function handleInputChange(): void {
+  resetFormState();
+
+try {
+  if (fileInput.files) {
+    validateFiles(fileInput.files);
+  }
+} catch (err: any) {
+  updateStatusMessage(err.message);
+  return;
+}
+button.disabled = false;
+}
+fileInput.addEventListener("change", handleInputChange);
+
+function resetFormState(): void {
+    button.disabled = true;
+    updateStatusMessage("🤷‍♂ Nothing's uploaded");
+  }
+  </script>
