@@ -19,6 +19,48 @@ import Layout from "../layouts/Layout.astro";
     <uc-config ctx-name="my-uploader" pubkey="ccddaf90ad29e3d2c660"> </uc-config>
   </section>
 </Layout>
+<style is:global>
+  html {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 20px;
+  }
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .file-input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    font-size: 16px;
+  }
+  .upload-form button {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  .upload-form button:disabled {
+    background-color: #77b6ff;
+    cursor: not-allowed;
+  }
+  .info-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>
 
 <script type="module">
 	import * as UC from "https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@v1/web/file-uploader.min.js";
