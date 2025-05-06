@@ -10,10 +10,10 @@
 <div id="file-info-list"></div>
 
 <script>
-  const form = document.querySelector<HTMLFormElement>("form")!;
+  const form = document.querySelector("form") as HTMLFormElement;
    const status = document.getElementById("status") as HTMLParagraphElement;
-   const fileInput = document.querySelector<HTMLInputElement>("input[type='file']")!;
-   const button = document.querySelector<HTMLButtonElement>("button")!;
+   const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
+   const button = document.querySelector("button") as HTMLButtonElement;
    const fileInfoList = document.getElementById("file-info-list") as HTMLDivElement;
   
    async function uploadFiles(formData: FormData): Promise<void> {
@@ -28,11 +28,11 @@
      }
 
      const data = await response.json();
-     console.log("File uploaded successfully:", data);
-     updateStatusMessage("✅ File uploaded successfully.");
+     console.log("Files uploaded successfully:", data);
+     updateStatusMessage("✅ File(s) uploaded successfully.");
    } catch (error) {
-     console.error("File upload failed:", error);
-     updateStatusMessage("❌ File upload failed.");
+     console.error("Uploading files failed", error);
+     updateStatusMessage("❌ Uploading file(s) failed.");
    }
  }
  function handleSubmit(event: SubmitEvent): void {
@@ -45,23 +45,23 @@
    fileInfoList.innerHTML = "";
 
 // Loop through files and log/display metadata
-    files.forEach((file, i) => {
-      const listItem = document.createElement("ul");
-      const title = document.createElement("p");
-      title.textContent = files.length > 1
-        ? `File details number ${i + 1}:`
-        : "File details:";
+    // files.forEach((file, i) => {
+    //   const listItem = document.createElement("ul");
+    //   const title = document.createElement("p");
+    //   title.textContent = files.length > 1
+    //     ? `File details number ${i + 1}:`
+    //     : "File details:";
 
-      listItem.innerHTML = `
-        <li>📄Name: ${file.name}</li>
-        <li>Type: ${file.type || "unknown"}</li>
-        <li>Size: ${(file.size / 1024).toFixed(2)} KB</li>
-      `;
-      fileInfoList.appendChild(title);
-      fileInfoList.appendChild(listItem);
-    })
+    //   listItem.innerHTML = `
+    //     <li>📄Name: ${file.name}</li>
+    //     <li>Type: ${file.type || "unknown"}</li>
+    //     <li>Size: ${(file.size / 1024).toFixed(2)} KB</li>
+    //   `;
+    //   fileInfoList.appendChild(title);
+    //   fileInfoList.appendChild(listItem);
+    // })
 
-   updateStatusMessage("⏳ Uploading file...");
+   updateStatusMessage("⏳ Uploading file(s)...");
    uploadFiles(formData);
  }
  form.addEventListener("submit", handleSubmit);
@@ -87,7 +87,7 @@
   }
 }
 function handleInputChange(): void {
-  resetFormState();
+  // resetFormState();
 
 try {
   if (fileInput.files) {
